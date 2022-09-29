@@ -5,8 +5,8 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const classes = sequelizeClient.define('classes', {
-    name: {
+  const performances = sequelizeClient.define('performances', {
+    text: {
       type: DataTypes.STRING,
       allowNull: false
     }
@@ -19,12 +19,10 @@ module.exports = function (app) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  classes.associate = function (models) {
+  performances.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    classes.belongsTo(models.study_programs, { onDelete: 'cascade' });
-    classes.hasMany(models.attendances, { onDelete: 'cascade' });
   };
 
-  return classes;
+  return performances;
 };
