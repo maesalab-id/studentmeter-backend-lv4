@@ -22,9 +22,10 @@ exports.Schedules = class Schedules extends Service {
         { model: models.users, as: 'lecturer' }
       ]
     };
-    params.query = {
-      lecturerId: params.user.type !== 'administrator' ? params.user.id : undefined
-    }
+    if (params.user.type !== 'administrator')
+      params.query = {
+        lecturerId: params.user.id
+      }
     return super.find(params);
   }
 };
