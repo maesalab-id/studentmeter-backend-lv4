@@ -18,11 +18,12 @@ exports.Schedules = class Schedules extends Service {
           include: [{
             model: models.attendances, attributes: ['id']
           }]
-        }
+        },
+        { model: models.users, as: 'lecturer' }
       ]
     };
     params.query = {
-      lecturerId: params.user.id
+      lecturerId: params.user.type !== 'administrator' ? params.user.id : undefined
     }
     return super.find(params);
   }
