@@ -18,4 +18,17 @@ exports.Users = class Users extends Service {
     };
     return super.find(params);
   }
+
+  async get(id, params) {
+    const sequelize = this.app.get('sequelizeClient');
+    const models = sequelize.models;
+    params.sequelize = {
+      raw: false,
+      include: [
+        { model: models.majors },
+        { model: models.study_programs }
+      ]
+    };
+    return super.get(id, params);
+  }
 };
