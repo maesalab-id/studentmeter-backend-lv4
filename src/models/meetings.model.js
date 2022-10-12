@@ -28,6 +28,7 @@ module.exports = function (app) {
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     meetings.belongsTo(models.schedules, { onDelete: 'cascade' });
     meetings.hasMany(models.stats, { onDelete: 'cascade' });
+    meetings.hasMany(models.tasks, { onDelete: 'cascade' });
   };
 
   return meetings;

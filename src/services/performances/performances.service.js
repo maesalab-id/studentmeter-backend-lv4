@@ -1,11 +1,9 @@
 // Initializes the `performances` service on path `/performances`
 const { Performances } = require('./performances.class');
-const createModel = require('../../models/performances.model');
 const hooks = require('./performances.hooks');
 
 module.exports = function (app) {
   const options = {
-    Model: createModel(app),
     paginate: app.get('paginate')
   };
 

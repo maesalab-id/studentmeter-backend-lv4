@@ -12,9 +12,14 @@ exports.Attendances = class Attendances extends Service {
     params.sequelize = {
       raw: false,
       include: [
-        { model: models.users, as: 'student' }
+        {
+          model: models.users, as: 'student', include: params.query.scheduleId ? [
+            { required: false, model: models.stats, where: { scheduleId: params.query.scheduleId } }
+          ] : []
+        },
       ]
     };
+    delete params.query.scheduleId;
     return super.find(params);
   }
 };

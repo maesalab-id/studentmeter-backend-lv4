@@ -5,8 +5,12 @@ const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const performances = sequelizeClient.define('performances', {
-    text: {
+  const submissions = sequelizeClient.define('submissions', {
+    file: {
+      type: DataTypes.BLOB,
+      allowNull: true
+    },
+    filename: {
       type: DataTypes.STRING,
       allowNull: false
     }
@@ -19,10 +23,12 @@ module.exports = function (app) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  performances.associate = function (models) {
+  submissions.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    submissions.belongsTo(models.tasks, { onDelete: 'cascade' });
+    submissions.belongsTo(models.users, { onDelete: 'cascade', as: 'student' });
   };
 
-  return performances;
+  return submissions;
 };

@@ -1,8 +1,7 @@
 const { Service } = require('feathers-sequelize');
 
-exports.Performances = class Performances extends Service {
+exports.Performances = class Performances {
   constructor(options, app) {
-    super(options, app);
     this.app = app;
   }
 

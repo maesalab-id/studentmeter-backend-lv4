@@ -19,13 +19,20 @@ exports.Schedules = class Schedules extends Service {
             model: models.attendances, attributes: ['id']
           }]
         },
-        { model: models.users, as: 'lecturer' }
+        { model: models.users, as: 'lecturer' },
+        {
+          attributes: ['id', 'number'],
+          model: sequelize.models.meetings,
+          include: [{
+            attributes: ['id'],
+            model: sequelize.models.tasks,
+            include: [{ attributes: ['id'], model: sequelize.models.submissions }]
+          }]
+        }
       ]
     };
     if (params.user.type !== 'administrator')
-      params.query = {
-        lecturerId: params.user.id
-      }
+      params.query = { lecturerId: params.user.id }
     return super.find(params);
   }
 };

@@ -6,6 +6,31 @@ exports.Meetings = class Meetings extends Service {
     this.app = app;
   }
 
+  async find(params) {
+    if (!params.provider) return await super.find(params);
+
+    const sequelize = this.app.get('sequelizeClient');
+    const models = sequelize.models;
+    params.sequelize = {
+      raw: false,
+      include: [
+        {
+          attributes: ['id'],
+          model: models.tasks,
+          include: [{
+            attributes: ['id', 'filename'],
+            model: models.submissions,
+            where: params.user.type === 'student' ? {
+              studentId: params.user.id
+            } : undefined,
+            required: false
+          }]
+        }
+      ]
+    };
+    return await super.find(params);
+  }
+
   async create(data) {
     const meetings = await this.app.service('meetings').find({
       query: {
@@ -30,8 +55,17 @@ exports.Meetings = class Meetings extends Service {
         }
         return value;
       })(),
+      notes: (function () {
+        let notes = {};
+        for (let i = 0; i < schedule.stats.length; i++) {
+          const stat = schedule.stats[i];
+          notes[stat] = null;
+        }
+        return notes;
+      })(),
       meetingId: meeting.id,
-      studentId: a.studentId
+      studentId: a.studentId,
+      scheduleId: schedule.id
     })));
     return meeting;
   }

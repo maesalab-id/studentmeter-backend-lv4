@@ -43,6 +43,7 @@ module.exports = function (app) {
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     users.belongsTo(models.majors, { onDelete: 'cascade' });
     users.belongsTo(models.study_programs, { onDelete: 'cascade' });
+    users.hasMany(models.stats, { onDelete: 'cascade', foreignKey: 'studentId' });
   };
 
   return users;

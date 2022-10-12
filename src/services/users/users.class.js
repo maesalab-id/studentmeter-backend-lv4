@@ -16,7 +16,8 @@ exports.Users = class Users extends Service {
         { model: models.study_programs }
       ]
     };
-    return super.find(params);
+    const data = await super.find(params);
+    return data;
   }
 
   async get(id, params) {

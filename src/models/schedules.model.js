@@ -23,6 +23,8 @@ module.exports = function (app) {
     schedules.belongsTo(models.subjects, { onDelete: 'cascade' });
     schedules.belongsTo(models.users, { onDelete: 'cascade', as: 'lecturer' });
     schedules.belongsTo(models.classes, { onDelete: 'cascade' });
+
+    schedules.hasMany(models.meetings, { onDelete: 'cascade' });
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };

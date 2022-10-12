@@ -8,6 +8,9 @@ const schedules = require('./schedules/schedules.service.js');
 const meetings = require('./meetings/meetings.service.js');
 const attendances = require('./attendances/attendances.service.js');
 const performances = require('./performances/performances.service.js');
+const tasks = require('./tasks/tasks.service.js');
+const submissions = require('./submissions/submissions.service.js');
+const enrollments = require('./enrollments/enrollments.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -20,4 +23,7 @@ module.exports = function (app) {
   app.configure(meetings);
   app.configure(attendances);
   app.configure(performances);
+  app.configure(tasks);
+  app.configure(submissions);
+  app.configure(enrollments);
 };
