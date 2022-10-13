@@ -7,8 +7,9 @@ exports.Enrollments = class Enrollments {
 
   async find(params) {
     const sequelize = this.app.get('sequelizeClient');
+    const user = params.user;
     const attendances = await sequelize.models.attendances.findAll({
-      where: { studentId: params.user.id },
+      where: { studentId:  user.type === 'student' ? user.id : params.query.studentId },
       include: [{
         model: sequelize.models.classes,
         include: [{

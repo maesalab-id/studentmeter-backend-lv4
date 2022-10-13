@@ -9,10 +9,21 @@ exports.Schedules = class Schedules extends Service {
   async find(params) {
     const sequelize = this.app.get('sequelizeClient');
     const models = sequelize.models;
+    const user = params.user;
+
     params.sequelize = {
       raw: false,
       include: [
-        { model: models.subjects },
+        {
+          required: true,
+          model: models.subjects,
+          where: user.type === 'study-program' ? { studyProgramId: user.studyProgramId } : undefined,
+          include: [{
+            required: true,
+            model: models.study_programs,
+            where: user.type === 'major' ? { majorId: user.majorId } : undefined
+          }]
+        },
         {
           model: models.classes, attributes: ['id', 'name'],
           include: [{
@@ -31,8 +42,10 @@ exports.Schedules = class Schedules extends Service {
         }
       ]
     };
-    if (params.user.type !== 'administrator')
-      params.query = { lecturerId: params.user.id }
-    return super.find(params);
+    if (user.type == 'lecturer')
+      params.query = { lecturerId: user.id }
+
+    const schedules = await super.find(params);
+    return schedules;
   }
 };
