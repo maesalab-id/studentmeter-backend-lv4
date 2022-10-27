@@ -11,19 +11,25 @@ exports.Attendances = class Attendances extends Service {
     const models = sequelize.models;
     params.sequelize = {
       raw: false,
+      distinct: true,
       include: [
         {
-          model: models.users, as: 'student', include: params.query.scheduleId ? [
-            { required: false, model: models.stats, where: { scheduleId: params.query.scheduleId } }
-          ] : []
+          model: models.users,
+          as: 'student',
+          include: params.query.scheduleId ? [
+            { required: true, model: models.stats, where: { scheduleId: params.query.scheduleId } }
+          ] : [],
         },
-      ]
+      ],
     };
 
     let filter = params.query.filter ? JSON.parse(params.query.filter) : null;
+    let schedule = await this.app.service('schedules').get(params.query.scheduleId);
 
     delete params.query.scheduleId;
     delete params.query.filter;
+    const assess = params.query.assess;
+    delete params.query.assess;
 
     let attendances = await super.find(params);
 
@@ -32,7 +38,13 @@ exports.Attendances = class Attendances extends Service {
         const attendance = attendances.data[i];
         const stats = attendance.student.stats;
         const lastStat = stats[stats.length - 1];
-        attendances.data[i].dataValues.student.dataValues.performance = lastStat.value;
+        let performance = {};
+        for (let m = 0; m < schedule.assessments.length; m++) {
+          const a = schedule.assessments[m];
+          let total = a.stats.map((s) => lastStat.value[s]).reduce((p, c) => p + c, 0);
+          performance[a.name] = Math.round(total / a.stats.length);
+        }
+        attendances.data[i].dataValues.student.dataValues.performance = !assess ? lastStat.value : performance;
       }
       attendances.data = attendances.data.filter((a) => {
         let pass = true;

@@ -9,6 +9,10 @@ module.exports = function (app) {
     stats: {
       type: DataTypes.JSON,
       allowNull: false
+    },
+    assessments: {
+      type: DataTypes.JSON,
+      allowNull: true
     }
   }, {
     hooks: {
