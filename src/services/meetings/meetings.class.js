@@ -37,8 +37,8 @@ exports.Meetings = class Meetings extends Service {
         scheduleId: data.scheduleId
       }
     });
-    data.number = meetings.data.length + 1;
-    data.date = new Date();
+    data.number = data.number ? data.number : meetings.data.length + 1;
+    data.date = data.date ? data.date : new Date();
     const meeting = await super.create(data);
     const schedule = await this.app.service('schedules').get(data.scheduleId);
     const attendances = await this.app.service('attendances').find({
@@ -46,7 +46,7 @@ exports.Meetings = class Meetings extends Service {
         classId: schedule.classId
       }
     });
-    await this.app.service('stats').create(attendances.data.map((a) => ({
+    const stats = await this.app.service('stats').create(attendances.data.map((a) => ({
       value: (function () {
         let value = {};
         for (let i = 0; i < schedule.stats.length; i++) {

@@ -1,4 +1,5 @@
 const { Service } = require('feathers-sequelize');
+const moment = require('moment');
 
 exports.Schedules = class Schedules extends Service {
   constructor(options, app) {
@@ -92,4 +93,20 @@ exports.Schedules = class Schedules extends Service {
     const schedules = await super.get(id, params);
     return schedules;
   }
+
+  async create(data) {
+    console.log(data.startTime);
+    let start = moment(data.startTime);
+    delete data.startTime;
+    const schedule = await super.create(data);
+    for (let i = 1; i <= 16; i++) {
+      const meeting = await this.app.service('meetings').create({
+        scheduleId: schedule.id, number: i, date: start.toDate()
+      });
+      console.log(meeting);
+      start.add(1, 'w');
+    }
+    return schedule;
+  }
+
 };

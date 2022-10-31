@@ -24,7 +24,7 @@ exports.Attendances = class Attendances extends Service {
     };
 
     let filter = params.query.filter ? JSON.parse(params.query.filter) : null;
-    let schedule = await this.app.service('schedules').get(params.query.scheduleId);
+    let schedule = params.query.scheduleId ? await this.app.service('schedules').get(params.query.scheduleId) : null;
 
     delete params.query.scheduleId;
     delete params.query.filter;
@@ -33,7 +33,7 @@ exports.Attendances = class Attendances extends Service {
 
     let attendances = await super.find(params);
 
-    if (filter) {
+    if (filter && schedule) {
       for (let i = 0; i < attendances.data.length; i++) {
         const attendance = attendances.data[i];
         const stats = attendance.student.stats;
