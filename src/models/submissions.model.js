@@ -7,7 +7,7 @@ module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const submissions = sequelizeClient.define('submissions', {
     file: {
-      type: DataTypes.BLOB,
+      type: DataTypes.BLOB('long'),
       allowNull: true
     },
     filename: {

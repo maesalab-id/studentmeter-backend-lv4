@@ -10,9 +10,11 @@ exports.Stats = class Stats extends Service {
     const sequelize = this.app.get('sequelizeClient');
     const models = sequelize.models;
     params.sequelize = {
+      attributes: { exclude: ['presentPhoto'] },
       raw: false,
       include: [
         { model: models.users, as: 'student' },
+        { model: models.meetings, attributes: { exclude: ['lecturerPresentPhoto'] } }
       ]
     };
 

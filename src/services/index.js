@@ -11,6 +11,7 @@ const performances = require('./performances/performances.service.js');
 const tasks = require('./tasks/tasks.service.js');
 const submissions = require('./submissions/submissions.service.js');
 const enrollments = require('./enrollments/enrollments.service.js');
+const scores = require('./scores/scores.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -26,4 +27,5 @@ module.exports = function (app) {
   app.configure(tasks);
   app.configure(submissions);
   app.configure(enrollments);
+  app.configure(scores);
 };

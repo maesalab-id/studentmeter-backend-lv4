@@ -17,7 +17,7 @@ exports.Attendances = class Attendances extends Service {
           model: models.users,
           as: 'student',
           include: params.query.scheduleId ? [
-            { required: true, model: models.stats, where: { scheduleId: params.query.scheduleId } }
+            { required: true, attributes: { exclude: ['presentPhoto'] }, model: models.stats, where: { scheduleId: params.query.scheduleId } }
           ] : [],
         },
       ],

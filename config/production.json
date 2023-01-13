@@ -1,4 +1,5 @@
 {
-  "host": "backend-app.feathersjs.com",
-  "port": "PORT"
+  "host": "studentmeter.maesalab.net",
+  "port": "PORT",
+  "mysql": "MYSQL_CONN_STRING"
 }

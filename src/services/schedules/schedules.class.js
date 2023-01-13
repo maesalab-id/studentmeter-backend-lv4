@@ -95,7 +95,6 @@ exports.Schedules = class Schedules extends Service {
   }
 
   async create(data) {
-    console.log(data.startTime);
     let start = moment(data.startTime);
     delete data.startTime;
     const schedule = await super.create(data);
@@ -103,8 +102,21 @@ exports.Schedules = class Schedules extends Service {
       const meeting = await this.app.service('meetings').create({
         scheduleId: schedule.id, number: i, date: start.toDate()
       });
-      console.log(meeting);
       start.add(1, 'w');
+    }
+    const attendances = await this.app.service('attendances').find({
+      query: { classId: data.classId }
+    });
+    const format = {};
+    for (let i = 0; i < schedule.scoreFormat.length; i++) {
+      format[schedule.scoreFormat[i]] = null;
+    }
+    for (let i = 0; i < attendances.data.length; i++) {
+      const score = await this.app.service('scores').create({
+        studentId: attendances.data[i].studentId,
+        scheduleId: schedule.id,
+        score: format
+      });
     }
     return schedule;
   }

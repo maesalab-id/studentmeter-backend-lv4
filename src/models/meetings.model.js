@@ -13,6 +13,14 @@ module.exports = function (app) {
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
+    },
+    lecturerPresentPhoto: {
+      type: DataTypes.BLOB('long'),
+      allowNull: true,
+    },
+    lecturerPresentDate: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     hooks: {

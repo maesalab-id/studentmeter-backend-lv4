@@ -13,6 +13,11 @@ module.exports = function (app) {
     assessments: {
       type: DataTypes.JSON,
       allowNull: true
+    },
+    scoreFormat: {
+      type: DataTypes.JSON,
+      allowNull: false,
+      defaultValue: ['UTS', 'UAS', 'Quiz', 'Tugas']
     }
   }, {
     hooks: {

@@ -13,6 +13,14 @@ module.exports = function (app) {
     notes: {
       type: DataTypes.JSON,
       allowNull: false
+    },
+    presentPhoto: {
+      type: DataTypes.BLOB,
+      allowNull: true
+    },
+    presentDate: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     hooks: {

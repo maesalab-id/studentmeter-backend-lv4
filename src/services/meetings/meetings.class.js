@@ -13,6 +13,7 @@ exports.Meetings = class Meetings extends Service {
     const models = sequelize.models;
     params.sequelize = {
       raw: false,
+      attributes: { exclude: ['lecturerPresentPhoto'] },
       include: [
         {
           attributes: ['id'],
@@ -67,6 +68,16 @@ exports.Meetings = class Meetings extends Service {
       studentId: a.studentId,
       scheduleId: schedule.id
     })));
+    return meeting;
+  }
+
+  async patch(id, data) {
+    if (data.lecturerPresentPhoto) {
+      data.lecturerPresentPhoto = Buffer.from(data.lecturerPresentPhoto, 'base64');
+      data.lecturerPresentDate = new Date();
+    }
+    const meeting = await super.patch(id, data);
+    console.log(meeting);
     return meeting;
   }
 };
